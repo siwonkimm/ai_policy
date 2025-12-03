@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>정책 톡톡 💡 AI 매칭 서비스</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box;
+            margin-top: 30px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 10px;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #34495e;
+        }
+
+        .input-group input[type="number"],
+        .input-group select {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #bdc3c7;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input[type="number"]:focus,
+        .input-group select:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .recommend-button {
+            width: 100%;
+            padding: 15px;
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+
+        .recommend-button:hover {
+            background-color: #27ae60;
+        }
+
+        .recommend-button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+
+        .result-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ecf0f1;
+        }
+
+        .result-header {
+            font-size: 22px;
+            font-weight: 700;
+            color: #3498db;
+            margin-bottom: 15px;
+        }
+
+        .result-count {
+            color: #e74c3c;
+            font-weight: 700;
+            margin-left: 5px;
+        }
+
+        .policy-card {
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 5px solid #3498db;
+        }
+
+        .policy-title {
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+
+        .policy-details {
+            font-size: 14px;
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+
+        .policy-id {
+            font-weight: 700;
+            color: #3498db;
+        }
+
+        .policy-detail-item strong {
+            color: #34495e;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-weight: 700;
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <img src="my.logo.png" alt="정책 톡톡 로고" class="logo">
+            <div class="title">정책 톡톡 💡</div>
+            <div class="subtitle">✨ 추천 완료! 나에게 맞는 정책을 확인하세요.</div>
+        </div>
+
+        <div id="loadingMessage" class="error-message" style="display:none;">
+            ⏳ AI가 정책을 분석 중입니다... 잠시만 기다려 주세요!
+        </div>
+        <div id="errorMessage" class="error-message" style="display:none;">
+            ❌ 서버 연결에 실패했습니다. (FastAPI 서버가 켜져 있는지 확인하세요!)
+        </div>
+
+        <div class="input-group">
+            <label for="age">만 나이:</label>
+            <input type="number" id="age" value="30" min="19" max="34">
+        </div>
+
+        <div class="input-group">
+            <label for="income">연소득 (만원):</label>
+            <input type="number" id="income" value="4000" min="0">
+        </div>
+
+        <div class="input-group">
+            <label>현재 무주택 여부:</label>
+            <div class="checkbox-group">
+                <input type="checkbox" id="asset_req" checked>
+                <label for="asset_req">무주택</label>
+            </div>
+        </div>
+
+        <button class="recommend-button" onclick="recommendPolicy()">
+            AI가 나에게 맞는 정책 추천받기
+        </button>
+
+        <div class="result-section">
+            <div class="result-header">
+                🔥 추천 결과 <span id="resultCount" class="result-count">(0건)</span>
+            </div>
+            <div id="policyList">
+                </div>
+        </div>
+    </div>
+
+    <script>
+        // 🚨 3단계: Render API 주소 반영 🚨
+        const RENDER_API_URL = 'https://ai-policy-matcher.onrender.com'; 
+
+        const policyList = document.getElementById('policyList');
+        const resultCount = document.getElementById('resultCount');
+        const recommendButton = document.querySelector('.recommend-button');
+        const loadingMessage = document.getElementById('loadingMessage');
+        const errorMessage = document.getElementById('errorMessage');
+
+        function showLoading(isLoading) {
+            recommendButton.disabled = isLoading;
+            recommendButton.textContent = isLoading ? 'AI가 분석 중...' : 'AI가 나에게 맞는 정책 추천받기';
+            loadingMessage.style.display = isLoading ? 'block' : 'none';
+            errorMessage.style.display = 'none'; // 로딩 시 에러 메시지 숨김
+        }
+
+        function displayError(show) {
+            errorMessage.style.display = show ? 'block' : 'none';
+        }
+
+        async function recommendPolicy() {
+            policyList.innerHTML = '';
+            resultCount.textContent = '(0건)';
+            displayError(false);
+            showLoading(true);
+
+            const age = parseInt(document.getElementById('age').value);
+            const income = parseInt(document.getElementById('income').value);
+            const assetReq = document.getElementById('asset_req').checked;
+
+            const data = {
+                age: age,
+                income: income,
+                asset_req: assetReq
+            };
+
+            try {
+                // Render API 서버로 데이터 전송
+                const response = await fetch(RENDER_API_URL + '/api/match', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                
+                // 결과 표시
+                displayPolicies(result.matched_policies);
+                resultCount.textContent = `(${result.matched_policies.length}건)`;
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                displayError(true); // API 연결 실패 메시지 표시
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function displayPolicies(policies) {
+            if (policies.length === 0) {
+                policyList.innerHTML = '<p style="text-align: center; color: #7f8c8d;">추천되는 정책이 없습니다. 조건을 변경해 보세요!</p>';
+                return;
+            }
+
+            policies.forEach(policy => {
+                const card = document.createElement('div');
+                card.className = 'policy-card';
+                
+                // 상세 설명 포맷팅
+                const detailsHtml = `
+                    <div class="policy-detail-item"><strong style="color:#e74c3c;">[최대 소득 조건]</strong> ${policy.INCOME_MAX !== 99999 ? `연소득 ${policy.INCOME_MAX}만원 이하` : '제한 없음'}</div>
+                    <div class="policy-detail-item"><strong style="color:#e67e22;">[나이 조건]</strong> 만 ${policy.AGE_MAX}세 이하</div>
+                    <div class="policy-detail-item"><strong style="color:#27ae60;">[추가 조건]</strong> 무주택(필수: ${policy.ASSET_REQ ? 'Yes' : 'No'}). 지역: 전국</div>
+                `;
+
+                card.innerHTML = `
+                    <div class="policy-title">${policy.TITLE}</div>
+                    <div class="policy-details">
+                        <span class="policy-id">[ID] ${policy.POLICY_ID}</span>
+                        ${detailsHtml}
+                    </div>
+                `;
+                policyList.appendChild(card);
+            });
+        }
+        
+        // 페이지 로드 시 기본 추천 실행 (선택 사항)
+        // document.addEventListener('DOMContentLoaded', recommendPolicy);
+    </script>
+
+</body>
+</html>

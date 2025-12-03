@@ -1,0 +1,57 @@
+[
+    {
+        "POLICY_ID": 1,
+        "TITLE": "청년 전용 버팀목 전세자금 대출",
+        "INCOME_MAX": 5000,
+        "AGE_MAX": 34,
+        "RESIDENCE": "전국",
+        "ASSET_REQ": true,
+        "JOB_TYPE": "단독",
+        "FAMILY_TYPE": "미혼",
+        "LEASE_TYPE": "전세"
+    },
+    {
+        "POLICY_ID": 2,
+        "TITLE": "중소기업 취업청년 전월세보증금 대출",
+        "INCOME_MAX": 5000,
+        "AGE_MAX": 34,
+        "RESIDENCE": "전국",
+        "ASSET_REQ": true,
+        "JOB_TYPE": "중소기업 재직",
+        "FAMILY_TYPE": "단독",
+        "LEASE_TYPE": "전월세"
+    },
+    {
+        "POLICY_ID": 3,
+        "TITLE": "서울시 청년 월세 지원",
+        "INCOME_MAX": 4125,
+        "AGE_MAX": 39,
+        "RESIDENCE": "서울",
+        "ASSET_REQ": false,
+        "JOB_TYPE": "무관",
+        "FAMILY_TYPE": "단독",
+        "LEASE_TYPE": "월세"
+    },
+    {
+        "POLICY_ID": 4,
+        "TITLE": "청년 주거급여",
+        "INCOME_MAX": 2000,
+        "AGE_MAX": 99,
+        "RESIDENCE": "전국",
+        "ASSET_REQ": true,
+        "JOB_TYPE": "무관",
+        "FAMILY_TYPE": "무관",
+        "LEASE_TYPE": "월세"
+    },
+    {
+        "POLICY_ID": 5,
+        "TITLE": "청년 우대형 주택청약 종합저축",
+        "INCOME_MAX": 3600,
+        "AGE_MAX": 34,
+        "RESIDENCE": "전국",
+        "ASSET_REQ": false,
+        "JOB_TYPE": "무관",
+        "FAMILY_TYPE": "무관",
+        "LEASE_TYPE": "저축"
+    }
+]
